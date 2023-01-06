@@ -21,28 +21,28 @@ class LoginWindow(QWidget):
         super().__init__()
         self.company = company
         self.emp_op_factory = emp_op_factory
-        self.layout = QGridLayout(self)
+        layout = QGridLayout(self)
         # Create the username label and line edit
-        self.username_label = LoginLabel("Username: ")
+        username_label = LoginLabel("Username: ")
         self.username_edit = LoginLine(self)
 
         # Create the password label and line edit
-        self.password_label = LoginLabel("Password: ")
+        password_label = LoginLabel("Password: ")
         self.password_edit = LoginLine(self)
         self.password_edit.setEchoMode(QLineEdit.Password)
 
         # Create the login button
-        self.login_button = LoginBtn("Login")
-        self.login_button.clicked.connect(self.login)
-        self.layout.addWidget(self.username_label, 0, 1)
-        self.layout.addWidget(self.username_edit, 0, 2)
-        self.layout.addWidget(self.password_label, 1, 1)
-        self.layout.addWidget(self.password_edit, 1, 2)
-        self.layout.addWidget(self.login_button, 2, 1, 2, 2)
+        login_button = LoginBtn("Login")
+        login_button.clicked.connect(self.login)
+        layout.addWidget(username_label, 0, 1)
+        layout.addWidget(self.username_edit, 0, 2)
+        layout.addWidget(password_label, 1, 1)
+        layout.addWidget(self.password_edit, 1, 2)
+        layout.addWidget(login_button, 2, 1, 2, 2)
 
         self.setStyleSheet("background-color: darkslategray; background-repeat: no-repeat; background-position: center")
 
-        self.setLayout(self.layout)
+        self.setLayout(layout)
         self.setWindowTitle("Login")
         self.show()
 

@@ -15,24 +15,24 @@ class WindowBoss(QWidget):
         self.company = company
         self.emp_op_factory = emp_op_factory
         self.setWindowTitle("Loggato come Boss")
-        self.layout = QGridLayout()
+        layout = QGridLayout()
         # Inizializzazione della nested list per la tabella
 
-        self.boss = BossSpecBtn("Boss View")
-        self.boss.clicked.connect(self.viewBoss)
-        self.employee = BossSpecBtn("Employee View")
-        self.employee.clicked.connect(self.viewEmployee)
-        self.operator = BossSpecBtn("Operator View")
-        self.operator.clicked.connect(self.viewOperator)
-        self.boss_label = BossLabel("Welcome Boss!")
-        self.boss_label.setAlignment(Qt.Qt.AlignCenter)
+        boss = BossSpecBtn("Boss View")
+        boss.clicked.connect(self.viewBoss)
+        employee = BossSpecBtn("Employee View")
+        employee.clicked.connect(self.viewEmployee)
+        operator = BossSpecBtn("Operator View")
+        operator.clicked.connect(self.viewOperator)
+        boss_label = BossLabel("Welcome Boss!")
+        boss_label.setAlignment(Qt.Qt.AlignCenter)
 
         #setto lo sfondo
-        self.setLayout(self.layout)
-        self.layout.addWidget(self.boss_label)
-        self.layout.addWidget(self.boss)
-        self.layout.addWidget(self.employee)
-        self.layout.addWidget(self.operator)
+        self.setLayout(layout)
+        layout.addWidget(boss_label)
+        layout.addWidget(boss)
+        layout.addWidget(employee)
+        layout.addWidget(operator)
         #Setto schermo intero
         self.setStyleSheet("background-image: url(img.png);")
         self.showMaximized()
@@ -80,43 +80,43 @@ class SottoWindowBoss(QWidget):
         self.table.setModel(self.model)
 
         # Inizializzo la visualizzazione tab
-        self.tabs = QTabWidget()
-        self.tab1 = QWidget()
-        self.tab2 = QWidget()
+        tabs = QTabWidget()
+        tab1 = QWidget()
+        tab2 = QWidget()
 
         # Aggiungo i tab
-        self.tabs.addTab(self.tab1, "Dipendenti")
-        self.tabs.addTab(self.tab2, "Operazioni")
+        tabs.addTab(tab1, "Dipendenti")
+        tabs.addTab(tab2, "Operazioni")
 
         # Creao il primo tab
-        self.tab1.layout = QVBoxLayout()
-        self.tab1.layout.addWidget(self.table)
-        self.tab1.setLayout(self.tab1.layout)
-        self.user_label = BossLabel("Welcome Boss")
+        tab1.layout = QVBoxLayout()
+        tab1.layout.addWidget(self.table)
+        tab1.setLayout(tab1.layout)
+        user_label = BossLabel("Welcome Boss")
 
         # Creo il secondo tab
-        self.tab2.layout = QGridLayout()
+        tab2.layout = QGridLayout()
         # Sort
-        self.key_label = WorkerLabel("Sorted by Col: ")
+        key_label = WorkerLabel("Sorted by Col: ")
         self.key_text = WorkerLine(self)
-        self.button1 = BossBtn("Sort")
-        self.button1.clicked.connect(self.ordina)
+        button1 = BossBtn("Sort")
+        button1.clicked.connect(self.ordina)
         # Find
-        self.word_label = WorkerLabel("Search word: ")
+        word_label = WorkerLabel("Search word: ")
         self.word_text = WorkerLine(self)
-        self.button2 = BossBtn("Find")
-        self.button2.clicked.connect(self.cerca)
+        button2 = BossBtn("Find")
+        button2.clicked.connect(self.cerca)
         # Delete
         delete_label = WorkerLabel("Worker name: ")
         self.delete_text = WorkerLine(self)
-        self.button3 = BossBtn("Fire")
-        self.button3.clicked.connect(self.fire)
+        button3 = BossBtn("Fire")
+        button3.clicked.connect(self.fire)
         # Cambia paga
-        self.salary_label = WorkerLabel("New Salary: ")
+        salary_label = WorkerLabel("New Salary: ")
         self.namesal_text = WorkerLine("Username")
         self.salary_text = WorkerLine("Salary")
-        self.button4 = BossBtn("Done")
-        self.button4.clicked.connect(self.salary)
+        button4 = BossBtn("Done")
+        button4.clicked.connect(self.salary)
         # Aggiungi dipendente
         type_label = WorkerLabel("Insert values: ")
         self.name = WorkerLine("Name")
@@ -125,49 +125,49 @@ class SottoWindowBoss(QWidget):
         self.password = WorkerLine("Password")
         self.type = WorkerLine("Type")
         self.salary = WorkerLine("Salary")
-        self.button5 = BossBtn("Insert")
-        self.button5.clicked.connect(self.insert)
+        button5 = BossBtn("Insert")
+        button5.clicked.connect(self.insert)
 
-        self.tab2.layout.addWidget(self.key_label, 0, 1)
-        self.tab2.layout.addWidget(self.key_text, 0, 2)
-        self.tab2.layout.addWidget(self.button1, 0, 3)
-        self.tab2.layout.addWidget(self.word_label, 1, 1)
-        self.tab2.layout.addWidget(self.word_text, 1, 2)
-        self.tab2.layout.addWidget(self.button2, 1, 3)
-        self.tab2.layout.addWidget(type_label, 2, 1)
-        self.tab2.layout.addWidget(self.name, 2, 2)
-        self.tab2.layout.addWidget(self.age, 2, 3)
-        self.tab2.layout.addWidget(self.username, 2, 4)
-        self.tab2.layout.addWidget(self.password, 2, 5)
-        self.tab2.layout.addWidget(self.type, 2, 6)
-        self.tab2.layout.addWidget(self.salary, 2, 7)
-        self.tab2.layout.addWidget(self.button5, 2, 8)
-        self.tab2.layout.addWidget(delete_label, 3, 1)
-        self.tab2.layout.addWidget(self.delete_text, 3, 2)
-        self.tab2.layout.addWidget(self.button3, 3, 3)
-        self.tab2.layout.addWidget(self.salary_label, 4, 1)
-        self.tab2.layout.addWidget(self.namesal_text, 4, 2)
-        self.tab2.layout.addWidget(self.salary_text, 4, 3)
-        self.tab2.layout.addWidget(self.button4, 4, 4)
-        self.tab2.setLayout(self.tab2.layout)
+        tab2.layout.addWidget(key_label, 0, 1)
+        tab2.layout.addWidget(self.key_text, 0, 2)
+        tab2.layout.addWidget(button1, 0, 3)
+        tab2.layout.addWidget(word_label, 1, 1)
+        tab2.layout.addWidget(self.word_text, 1, 2)
+        tab2.layout.addWidget(button2, 1, 3)
+        tab2.layout.addWidget(type_label, 2, 1)
+        tab2.layout.addWidget(self.name, 2, 2)
+        tab2.layout.addWidget(self.age, 2, 3)
+        tab2.layout.addWidget(self.username, 2, 4)
+        tab2.layout.addWidget(self.password, 2, 5)
+        tab2.layout.addWidget(self.type, 2, 6)
+        tab2.layout.addWidget(self.salary, 2, 7)
+        tab2.layout.addWidget(button5, 2, 8)
+        tab2.layout.addWidget(delete_label, 3, 1)
+        tab2.layout.addWidget(self.delete_text, 3, 2)
+        tab2.layout.addWidget(button3, 3, 3)
+        tab2.layout.addWidget(salary_label, 4, 1)
+        tab2.layout.addWidget(self.namesal_text, 4, 2)
+        tab2.layout.addWidget(self.salary_text, 4, 3)
+        tab2.layout.addWidget(button4, 4, 4)
+        tab2.setLayout(tab2.layout)
 
 
         # Logout
-        self.logout = BossBtn("Logout")
-        self.logout.clicked.connect(self.close)
+        logout = BossBtn("Logout")
+        logout.clicked.connect(self.close)
         # Save
-        self.save = BossBtn("Save")
-        self.save.clicked.connect(self.savefun)
+        save = BossBtn("Save")
+        save.clicked.connect(self.savefun)
 
 
         # Imposto il layout per la finestra principale e gli aggiungo i widget
-        self.layout = QGridLayout()
-        self.layout.addWidget(self.user_label, 0, 1)
-        self.layout.addWidget(self.tabs, 1, 1, 1, 10)
-        self.layout.addWidget(self.save, 0, 9)
-        self.layout.addWidget(self.logout, 0, 10)
+        layout = QGridLayout()
+        layout.addWidget(user_label, 0, 1)
+        layout.addWidget(tabs, 1, 1, 1, 10)
+        layout.addWidget(save, 0, 9)
+        layout.addWidget(logout, 0, 10)
         self.setStyleSheet("background-color: silver; background-repeat: no-repeat; background-position: center")
-        self.setLayout(self.layout)
+        self.setLayout(layout)
 
     def savefun(self):
         try:
@@ -308,7 +308,7 @@ class WindowOperator(QWidget):
                   Car("Hatchback", "green", 3, ["sport suspension", "rearview camera"]),
                   Car("Coupe", "black", 4, ["turbocharged engine", "sport wheels"])]])
 
-        self.user_label = WorkerLabel("Welcome " + username)
+        user_label = WorkerLabel("Welcome " + username)
         self.setWindowTitle("Loggato come Operatore")
         # Creazione tabella
         self.table = QtWidgets.QTableView()
@@ -322,21 +322,21 @@ class WindowOperator(QWidget):
         self.table.setEditTriggers(QtWidgets.QTableView.DoubleClicked | QtWidgets.QTableView.EditKeyPressed)
         self.table.setModel(self.model)
         # Inizializzo la visualizzazione tab
-        self.tabs = QTabWidget()
-        self.tab1 = QWidget()
-        self.tab2 = QWidget()
+        tabs = QTabWidget()
+        tab1 = QWidget()
+        tab2 = QWidget()
 
         # Aggiungo i tab
-        self.tabs.addTab(self.tab1, "Tabella Commissioni")
-        self.tabs.addTab(self.tab2, "Operazioni")
+        tabs.addTab(tab1, "Tabella Commissioni")
+        tabs.addTab(tab2, "Operazioni")
 
         # Creao il primo tab
-        self.tab1.layout = QVBoxLayout(self)
-        self.tab1.layout.addWidget(self.table)
-        self.tab1.setLayout(self.tab1.layout)
+        tab1.layout = QVBoxLayout(self)
+        tab1.layout.addWidget(self.table)
+        tab1.setLayout(tab1.layout)
 
         # Creo il secondo tab
-        self.tab2.layout = QGridLayout(self)
+        tab2.layout = QGridLayout(self)
         # Sort
         key_label = WorkerLabel("Sorted by Col: ")
         self.key_text = WorkerLine(self)
@@ -361,39 +361,45 @@ class WindowOperator(QWidget):
         self.optionals_text = WorkerLine("Optionals")
         button4 = WorkerBtn("Insert")
         button4.clicked.connect(self.insert)
+        # Sum ordini
+        sum_label = WorkerLabel("Sum Orders: ")
+        button5 = WorkerBtn("Done")
+        button5.clicked.connect(self.sum_ordini)
         # Aggiungo al tab i widget regolandoli nel gridlayout
-        self.tab2.layout.addWidget(key_label, 0, 1)
-        self.tab2.layout.addWidget(self.key_text, 0, 2)
-        self.tab2.layout.addWidget(button1, 0, 3)
-        self.tab2.layout.addWidget(word_label, 1, 1)
-        self.tab2.layout.addWidget(self.word_text, 1, 2)
-        self.tab2.layout.addWidget(button2, 1, 3)
-        self.tab2.layout.addWidget(type_label, 2, 1)
-        self.tab2.layout.addWidget(self.type_text, 2, 2)
-        self.tab2.layout.addWidget(self.color_text, 2, 3)
-        self.tab2.layout.addWidget(self.number_text, 2, 4)
-        self.tab2.layout.addWidget(self.optionals_text, 2, 5)
-        self.tab2.layout.addWidget(button4, 2, 6)
-        self.tab2.layout.addWidget(delete_label, 3, 1)
-        self.tab2.layout.addWidget(self.delete_text, 3, 2)
-        self.tab2.layout.addWidget(button3, 3, 3)
-        self.tab2.layout.addWidget(self.box, 3, 4)
-        self.tab2.setLayout(self.tab2.layout)
+        tab2.layout.addWidget(key_label, 0, 1)
+        tab2.layout.addWidget(self.key_text, 0, 2)
+        tab2.layout.addWidget(button1, 0, 3)
+        tab2.layout.addWidget(word_label, 1, 1)
+        tab2.layout.addWidget(self.word_text, 1, 2)
+        tab2.layout.addWidget(button2, 1, 3)
+        tab2.layout.addWidget(type_label, 2, 1)
+        tab2.layout.addWidget(self.type_text, 2, 2)
+        tab2.layout.addWidget(self.color_text, 2, 3)
+        tab2.layout.addWidget(self.number_text, 2, 4)
+        tab2.layout.addWidget(self.optionals_text, 2, 5)
+        tab2.layout.addWidget(button4, 2, 6)
+        tab2.layout.addWidget(delete_label, 3, 1)
+        tab2.layout.addWidget(self.delete_text, 3, 2)
+        tab2.layout.addWidget(button3, 3, 3)
+        tab2.layout.addWidget(self.box, 3, 4)
+        tab2.layout.addWidget(sum_label, 4, 1)
+        tab2.layout.addWidget(button5, 4, 3)
+        tab2.setLayout(tab2.layout)
         # Setto lo sfondo
         self.setStyleSheet("background-color: powderblue; background-repeat: no-repeat; background-position: center")
         # Logout
-        self.logout = WorkerBtn("Logout")
-        self.logout.clicked.connect(self.close)
+        logout = WorkerBtn("Logout")
+        logout.clicked.connect(self.close)
         # Save
-        self.save = WorkerBtn("Save")
-        self.save.clicked.connect(self.savefun)
+        save = WorkerBtn("Save")
+        save.clicked.connect(self.savefun)
         # Imposto il layout per la finestra principale e gli aggiungo i widget
-        self.layout = QGridLayout(self)
-        self.layout.addWidget(self.user_label, 0, 1)
-        self.layout.addWidget(self.tabs, 1, 1, 1, 10)
-        self.layout.addWidget(self.save, 0, 9)
-        self.layout.addWidget(self.logout, 0, 10)
-        self.setLayout(self.layout)
+        layout = QGridLayout(self)
+        layout.addWidget(user_label, 0, 1)
+        layout.addWidget(tabs, 1, 1, 1, 10)
+        layout.addWidget(save, 0, 9)
+        layout.addWidget(logout, 0, 10)
+        self.setLayout(layout)
 
     def ordina(self):
         if self.key_text.text():
@@ -470,6 +476,16 @@ class WindowOperator(QWidget):
         else:
             error_dialog = QMessageBox.warning(self, "Error", "Invalid insert", QMessageBox.Ok)
 
+    def sum_ordini(self):
+        try:
+            msg = QMessageBox()
+            sum_order = lambda data: sum(int(orders[2]) for orders in data)
+            result = sum_order(self.data_operatore)
+            msg.setText("La somma degli ordini è: {}".format(result))
+            msg.exec_()
+        except:
+            error_dialog = QMessageBox.warning(self, "Error", "An error occured", QMessageBox.Ok)
+
     def savefun(self):
         try:
             # Open file for writing
@@ -502,7 +518,7 @@ class WindowEmployee(QWidget):
                   Investor("Lamborghini", 2500, 4),
                   Investor("Fiat", 3000, 5)]])
 
-        self.user_label = WorkerLabel("Welcome " + username)
+        user_label = WorkerLabel("Welcome " + username)
         self.setWindowTitle("Loggato come Impiegato")
         # Creazione tabella
         self.table = QtWidgets.QTableView()
@@ -517,21 +533,21 @@ class WindowEmployee(QWidget):
         # Do la possibilità di modifica delle colonne
         self.table.setEditTriggers(QtWidgets.QTableView.DoubleClicked | QtWidgets.QTableView.EditKeyPressed)
         # Inizializzo la visualizzazione tab
-        self.tabs = QTabWidget()
-        self.tab1 = QWidget()
-        self.tab2 = QWidget()
+        tabs = QTabWidget()
+        tab1 = QWidget()
+        tab2 = QWidget()
 
         # Aggiungo i tab
-        self.tabs.addTab(self.tab1, "Tabella Investitori")
-        self.tabs.addTab(self.tab2, "Operazioni")
+        tabs.addTab(tab1, "Tabella Investitori")
+        tabs.addTab(tab2, "Operazioni")
 
         # Creao il primo tab
-        self.tab1.layout = QVBoxLayout(self)
-        self.tab1.layout.addWidget(self.table)
-        self.tab1.setLayout(self.tab1.layout)
+        tab1.layout = QVBoxLayout(self)
+        tab1.layout.addWidget(self.table)
+        tab1.setLayout(tab1.layout)
 
         # Creo il secondo tab
-        self.tab2.layout = QGridLayout(self)
+        tab2.layout = QGridLayout(self)
         # Sort
         key_label = WorkerLabel("Sorted by Col: ")
         self.key_text = WorkerLine(self)
@@ -560,39 +576,39 @@ class WindowEmployee(QWidget):
         money = WorkerBtn("Find")
         money.clicked.connect(self.income)
         # Aggiungo al tab i widget regolandoli nel gridlayout
-        self.tab2.layout.addWidget(key_label, 0, 1)
-        self.tab2.layout.addWidget(self.key_text, 0, 2)
-        self.tab2.layout.addWidget(button1, 0, 3)
-        self.tab2.layout.addWidget(word_label, 1, 1)
-        self.tab2.layout.addWidget(self.word_text, 1, 2)
-        self.tab2.layout.addWidget(button2, 1, 3)
-        self.tab2.layout.addWidget(type_label, 2, 1)
-        self.tab2.layout.addWidget(self.name_text, 2, 2)
-        self.tab2.layout.addWidget(self.investment_text, 2, 3)
-        self.tab2.layout.addWidget(self.orders_text, 2, 4)
-        self.tab2.layout.addWidget(button4, 2, 6)
-        self.tab2.layout.addWidget(delete_label, 3, 1)
-        self.tab2.layout.addWidget(self.delete_text, 3, 2)
-        self.tab2.layout.addWidget(button3, 3, 3)
-        self.tab2.layout.addWidget(self.box, 3, 4)
-        self.tab2.layout.addWidget(money_label, 4, 1)
-        self.tab2.layout.addWidget(money, 4, 3)
-        self.tab2.setLayout(self.tab2.layout)
+        tab2.layout.addWidget(key_label, 0, 1)
+        tab2.layout.addWidget(self.key_text, 0, 2)
+        tab2.layout.addWidget(button1, 0, 3)
+        tab2.layout.addWidget(word_label, 1, 1)
+        tab2.layout.addWidget(self.word_text, 1, 2)
+        tab2.layout.addWidget(button2, 1, 3)
+        tab2.layout.addWidget(type_label, 2, 1)
+        tab2.layout.addWidget(self.name_text, 2, 2)
+        tab2.layout.addWidget(self.investment_text, 2, 3)
+        tab2.layout.addWidget(self.orders_text, 2, 4)
+        tab2.layout.addWidget(button4, 2, 6)
+        tab2.layout.addWidget(delete_label, 3, 1)
+        tab2.layout.addWidget(self.delete_text, 3, 2)
+        tab2.layout.addWidget(button3, 3, 3)
+        tab2.layout.addWidget(self.box, 3, 4)
+        tab2.layout.addWidget(money_label, 4, 1)
+        tab2.layout.addWidget(money, 4, 3)
+        tab2.setLayout(tab2.layout)
         # Setto lo sfondo
-        self.setStyleSheet("background-color: blanchedalmond	; background-repeat: no-repeat; background-position: center")
+        self.setStyleSheet("background-color: blanchedalmond; background-repeat: no-repeat; background-position: center")
         # Logout
-        self.logout = WorkerBtn("Logout")
-        self.logout.clicked.connect(self.close)
+        logout = WorkerBtn("Logout")
+        logout.clicked.connect(self.close)
         # Save
-        self.save = WorkerBtn("Save")
-        self.save.clicked.connect(self.savefun)
+        save = WorkerBtn("Save")
+        save.clicked.connect(self.savefun)
         # Imposto il layout per la finestra principale e gli aggiungo i widget
-        self.layout = QGridLayout(self)
-        self.layout.addWidget(self.user_label, 0, 1)
-        self.layout.addWidget(self.tabs, 1, 1, 1, 10)
-        self.layout.addWidget(self.save, 0, 9)
-        self.layout.addWidget(self.logout, 0, 10)
-        self.setLayout(self.layout)
+        layout = QGridLayout(self)
+        layout.addWidget(user_label, 0, 1)
+        layout.addWidget(tabs, 1, 1, 1, 10)
+        layout.addWidget(save, 0, 9)
+        layout.addWidget(logout, 0, 10)
+        self.setLayout(layout)
 
     def ordina(self):
         if self.key_text.text():
