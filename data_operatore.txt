@@ -1,0 +1,1 @@
+[["Sedan", "blue", 5, "leather seats, sunroof"], ["SUV", "red", 2, "4WD, tow package"], ["Truck", "silver", 1, "extended cab, bed liner, leather seats"], ["Hatchback", "green", 3, "sport suspension, rearview camera"]]
