@@ -1,7 +1,7 @@
 import abc
 import time
 
-
+# Decoratore per la misurazione del tempo di creazione
 def measure_time(func):
     def wrapper(*args, **kwargs):
         inizio = time.perf_counter()
@@ -12,18 +12,20 @@ def measure_time(func):
         return result
     return wrapper
 
-
+# Uso la metaclasse perchè in python tutte le classi sono create da metaclassi ma quella di default è type,
+# a me serve una metaclasse che indichi il fatto che la mia classe sarà astratta che non può essere istanziata
+# Inoltre in questo file utilizzo il desing pattern abstract factory
 class WorkerFactory(metaclass=abc.ABCMeta):
-    """Abstract factory for creating Worker objects."""
+    """Factory astratta per la creazione di oggetti worker"""
 
     @abc.abstractmethod
     def create_worker(self, name, age, username, password, type, salary):
-        """Create an Employee object."""
+        """Creazione degli oggetti worker, definita astratta"""
         pass
 
 
-class EmployeeFactory(WorkerFactory):
-    """Concrete factory for creating Employee and Operator objects."""
+class Emp_OP_Factory(WorkerFactory):
+    """Concreta creazione della factory worker"""
     @measure_time
     def create_worker(self, name, age, username, password, type, salary):
         if type == "Employee":
@@ -35,14 +37,14 @@ class EmployeeFactory(WorkerFactory):
 
 
 class BossFactory(WorkerFactory):
-    """Concrete factory for creating Boss objects."""
+    """Concreta creazione della factory boss"""
     @measure_time
     def create_worker(self, name, age, username, password, type, salary):
         return Boss(name, age, username, password, salary)
 
 
 class Worker(metaclass=abc.ABCMeta):
-    """Abstract base class for Worker objects."""
+    """Classe astratta degli oggetti worker"""
 
     def __init__(self, name, age, username, password, salary):
         self.name = name
@@ -60,7 +62,7 @@ class Worker(metaclass=abc.ABCMeta):
 
 
 class Employee(Worker):
-    """Concrete class for Employee objects."""
+    """Classe concreta degli oggetti employee"""
 
     def __init__(self, name, age, username, password, salary):
         super().__init__(name, age, username, password, salary)
@@ -70,7 +72,7 @@ class Employee(Worker):
 
 
 class Operator(Worker):
-    """Concrete class for Operator objects."""
+    """Classe concreta degli oggetti operator"""
 
     def __init__(self, name, age, username, password, salary):
         super().__init__(name, age, username, password, salary)
@@ -80,7 +82,7 @@ class Operator(Worker):
 
 
 class Boss(Worker):
-    """Concrete class for Boss objects."""
+    """Classe concreta degli oggetti boss"""
 
     def __init__(self, name, age, username, password, salary):
         super().__init__(name, age, username, password, salary)

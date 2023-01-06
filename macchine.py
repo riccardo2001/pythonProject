@@ -1,3 +1,4 @@
+# Semplice classe per la creazione degli oggetti per gli operatori
 class Car:
     def __init__(self, type, color, quantity, optional):
         self.type = type

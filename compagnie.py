@@ -1,3 +1,4 @@
+# Classe per racchiudere le due factory attraverso due liste
 class Company:
     def __init__(self):
         # Use the factory to create the Employee objects
@@ -11,7 +12,7 @@ class Company:
         self.bosses.append(boss)
 
     def check_credentials(self, username, password):
-        """Check if the provided username and password are valid."""
+        """Controllo le credenziali"""
         for worker in self.workers:
             if worker.username == username and worker.password == password:
                 return worker.get_type()

@@ -1,5 +1,6 @@
 from PyQt5 import Qt, QtCore
 
+# Classi riguardanti i modelli delle tabelle utilizzate cambia solamente il titolo delle colonne
 
 class TableModelBoss(QtCore.QAbstractTableModel):
     def __init__(self, data):

@@ -1,5 +1,7 @@
 from PyQt5.QtWidgets import QPushButton, QLabel, QLineEdit
 
+# Classe per l'abbelimento dei componenti riferita solamente agli impiegati e lavoratori
+
 class WorkerBtn(QPushButton):
     def __init__(self, text):
         super().__init__(text)

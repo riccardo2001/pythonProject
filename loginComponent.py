@@ -1,5 +1,6 @@
 from PyQt5.QtWidgets import QPushButton, QLabel, QLineEdit
 
+# Classe per l'abbelimento dei componenti di login
 
 class LoginBtn(QPushButton):
     def __init__(self, text):

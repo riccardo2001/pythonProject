@@ -3,7 +3,7 @@ from workerpages import WindowEmployee, WindowBoss, WindowOperator
 from loginComponent import LoginBtn, LoginLabel, LoginLine
 import time
 
-
+# Decoratore per misurare il login
 def measure_time(func):
     def wrapper(widget):
         inizio = time.perf_counter()
@@ -15,11 +15,12 @@ def measure_time(func):
     return wrapper
 
 
+# Pagina di login
 class LoginWindow(QWidget):
-    def __init__(self, company, employee_factory):
+    def __init__(self, company, emp_op_factory):
         super().__init__()
         self.company = company
-        self.employee_factory = employee_factory
+        self.emp_op_factory = emp_op_factory
         self.layout = QGridLayout(self)
         # Create the username label and line edit
         self.username_label = LoginLabel("Username: ")
@@ -56,7 +57,7 @@ class LoginWindow(QWidget):
         if person == "Boss":
             with open('username.txt', 'w') as f:
                 f.write(username + '\n')
-            self.w = WindowBoss(self.company, self.employee_factory)
+            self.w = WindowBoss(self.company, self.emp_op_factory)
             self.w.show()
             self.close()
         elif person == "Employee":

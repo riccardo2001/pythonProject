@@ -1,5 +1,6 @@
 from PyQt5.QtWidgets import QPushButton, QLabel, QLineEdit
 
+# Classe per l'abbelimento dei componenti riferita solamente al capo
 
 class BossLabel(QLabel):
     def __init__(self, text):

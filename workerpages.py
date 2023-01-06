@@ -10,10 +10,10 @@ import os
 import pickle
 
 class WindowBoss(QWidget):
-    def __init__(self, company, employee_factory):
+    def __init__(self, company, emp_op_factory):
         super().__init__()
         self.company = company
-        self.employee_factory = employee_factory
+        self.emp_op_factory = emp_op_factory
         self.setWindowTitle("Loggato come Boss")
         self.layout = QGridLayout()
         # Inizializzazione della nested list per la tabella
@@ -39,7 +39,7 @@ class WindowBoss(QWidget):
 
 
     def viewBoss(self):
-        self.w = SottoWindowBoss(self.company, self.employee_factory)
+        self.w = SottoWindowBoss(self.company, self.emp_op_factory)
         self.w.show()
 
     def viewEmployee(self):
@@ -52,10 +52,10 @@ class WindowBoss(QWidget):
 
 
 class SottoWindowBoss(QWidget):
-    def __init__(self, company, employee_factory):
+    def __init__(self, company, emp_op_factory):
         super().__init__()
         self.company = company
-        self.employee_factory = employee_factory
+        self.emp_op_factory = emp_op_factory
         self.setWindowTitle("Loggato come Boss")
         if os.path.exists('data_boss.txt'):
             # Open file for reading
@@ -200,7 +200,7 @@ class SottoWindowBoss(QWidget):
                 self.word_text.setText("")
                 if out:
                     msg = QMessageBox()
-                    msg.setText("Elemento trovato nella/e posizione/i: {}".format(out))
+                    msg.setText("Elemento trovato nella/e posizione/i: {} \n Dipendente: {}".format(out, self.data_boss[out[0][0]-1]))
                     msg.exec_()
                 else:
                     msg = QMessageBox()
@@ -218,7 +218,7 @@ class SottoWindowBoss(QWidget):
                 # Operazione per aggiornare la tabella
                 self.model = TableModelOperator(self.data_boss)
                 self.table.setModel(self.model)
-                self.company.add_worker(self.employee_factory.create_worker(self.name.text(), self.age.text(), self.username.text(), self.password.text(), self.type.text(), self.salary.text()))
+                self.company.add_worker(self.emp_op_factory.create_worker(self.name.text(), self.age.text(), self.username.text(), self.password.text(), self.type.text(), self.salary.text()))
                 self.name.setText("Name")
                 self.age.setText("Age")
                 self.username.setText("Username")
@@ -242,8 +242,8 @@ class SottoWindowBoss(QWidget):
                     self.model = TableModelOperator(self.data_boss)
                     self.table.setModel(self.model)
                     self.company.setworker_salary(self.salary_text.text(), self.namesal_text.text())
-                    self.namesal_text.setText("")
-                    self.salary_text.setText("")
+                    self.namesal_text.setText("Username")
+                    self.salary_text.setText("Salary")
                     self.serialize_obj()
                 else:
                     msg = QMessageBox()
@@ -418,7 +418,7 @@ class WindowOperator(QWidget):
                 self.word_text.setText("")
                 if out:
                     msg = QMessageBox()
-                    msg.setText("Elemento trovato nella/e posizione/i: {}".format(out))
+                    msg.setText("Elemento trovato nella/e posizione/i: {} \n Macchina: {}".format(out, self.data_operatore[out[0][0]-1]))
                     msg.exec_()
                 else:
                     msg = QMessageBox()
@@ -617,7 +617,7 @@ class WindowEmployee(QWidget):
                 self.word_text.setText("")
                 if out:
                     msg = QMessageBox()
-                    msg.setText("Elemento trovato nella/e posizione/i: {}".format(out))
+                    msg.setText("Elemento trovato nella/e posizione/i: {} \n Cliente: {}".format(out, self.data_impiegato[out[0][0]-1]))
                     msg.exec_()
                 else:
                     msg = QMessageBox()

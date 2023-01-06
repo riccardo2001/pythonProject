@@ -1,3 +1,4 @@
+# Semplice classe per la creazione degli oggetti per gli impiegati
 class Investor:
     def __init__(self, business_name, investment, n_order):
         self.business_name = business_name
