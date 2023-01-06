@@ -202,7 +202,7 @@ class SottoWindowBoss(QWidget):
         if self.key_text.text():
             try:
                 # Operazione per aggiornare la tabella
-                self.model = TableModelOperator(sorted(self.data_boss, key=lambda i: i[int(self.key_text.text())-1],reverse=self.reverse.isChecked()))
+                self.model = TableModelBoss(sorted(self.data_boss, key=lambda i: i[int(self.key_text.text())-1],reverse=self.reverse.isChecked()))
                 self.key_text.setText("")
                 self.table.setModel(self.model)
                 self.savefun()
@@ -236,20 +236,24 @@ class SottoWindowBoss(QWidget):
     def insert(self):
         if self.name.text() and self.age.text() and self.username.text() and self.password.text() and (self.type.text() == "Operator" or self.type.text() == "Employee") and self.salary.text():
             try:
-
-                # Operazione per aggiornare la tabella
-                self.data_boss.append([self.name.text(), int(self.age.text()), self.type.text(), int(self.salary.text())])
-                self.model = TableModelOperator(self.data_boss)
-                self.table.setModel(self.model)
-                self.company.add_worker(self.emp_op_factory.create_worker(self.name.text(), int(self.age.text()), self.username.text(), self.password.text(), self.type.text(), int(self.salary.text())))
+                out = [(ind, ind2) for ind, i in enumerate(self.data_boss)
+                       for ind2, y in enumerate(i) if self.username.text() in str(y)]
+                if not out:
+                    # Operazione per aggiornare la tabella
+                    self.data_boss.append([self.name.text(), int(self.age.text()), self.type.text(), int(self.salary.text())])
+                    self.model = TableModelBoss(self.data_boss)
+                    self.table.setModel(self.model)
+                    self.company.add_worker(self.emp_op_factory.create_worker(self.name.text(), int(self.age.text()), self.username.text(), self.password.text(), self.type.text(), int(self.salary.text())))
+                    self.serialize_obj()
+                    self.savefun()
+                else:
+                    error_dialog = QMessageBox.warning(self, "Error", "Utente già presente", QMessageBox.Ok)
                 self.name.setText("Name")
                 self.age.setText("Age")
                 self.username.setText("Username")
                 self.password.setText("Password")
                 self.type.setText("Type")
                 self.salary.setText("Salary")
-                self.serialize_obj()
-                self.savefun()
             except:
                 error_dialog = QMessageBox.warning(self, "Error", "Invalid insert", QMessageBox.Ok)
         else:
@@ -264,7 +268,7 @@ class SottoWindowBoss(QWidget):
                 if out:
                     # Operazioni di aggiornamento e visualizzazione nuova tabella
                     self.data_boss[out[0][0]][3] = int(self.salary_text.text())
-                    self.model = TableModelOperator(self.data_boss)
+                    self.model = TableModelBoss(self.data_boss)
                     self.table.setModel(self.model)
                     self.company.setworker_salary(self.salary_text.text(), self.namesal_text.text())
                     self.namesal_text.setText("Username")
@@ -291,7 +295,7 @@ class SottoWindowBoss(QWidget):
                 if out:
                     # Operazioni di aggiornamento e visualizzazione nuova tabella
                     del(self.data_boss[out[0][0]])
-                    self.model = TableModelOperator(self.data_boss)
+                    self.model = TableModelBoss(self.data_boss)
                     self.table.setModel(self.model)
                     self.company.delworker(self.delete_text.text())
                     self.delete_text.setText("")
@@ -510,10 +514,16 @@ class WindowOperator(QWidget):
     def insert(self):
         if self.type_text.text() and self.color_text.text() and self.number_text.text():
             try:
-                if self.optionals_text.text():
-                    self.data_operatore.append([self.type_text.text(), self.color_text.text(), int(self.number_text.text()), self.optionals_text.text()])
+                out = ([[ind, ind2] for ind, i in enumerate(self.data_operatore)
+                        for ind2, y in enumerate(i) if self.type_text.text() == str(y)])
+                if not out:
+                    if self.optionals_text.text():
+                        self.data_operatore.append([self.type_text.text(), self.color_text.text(), int(self.number_text.text()), self.optionals_text.text()])
+                    else:
+                        self.data_operatore.append([self.type_text.text(), self.color_text.text(), self.number_text.text(), " "])
                 else:
-                    self.data_operatore.append([self.type_text.text(), self.color_text.text(), self.number_text.text(), " "])
+                    error_dialog = QMessageBox.warning(self, "Error", "Tipo già presente", QMessageBox.Ok)
+
                 self.type_text.setText("Type")
                 self.color_text.setText("Color")
                 self.number_text.setText("Number")
@@ -718,13 +728,18 @@ class WindowEmployee(QWidget):
     def insert(self):
         if self.name_text.text() and self.investment_text.text() and self.orders_text.text():
             try:
-                self.data_impiegato.append([self.name_text.text(), int(self.investment_text.text()), int(self.orders_text.text())])
+                out = [(ind, ind2) for ind, i in enumerate(self.data_impiegato)
+                       for ind2, y in enumerate(i) if self.name_text.text() == str(y)]
+                if not out:
+                    self.data_impiegato.append([self.name_text.text(), int(self.investment_text.text()), int(self.orders_text.text())])
+                    # Operazione per aggiornare la tabella
+                    self.model = TableModelImpiegato(self.data_impiegato)
+                    self.table.setModel(self.model)
+                else:
+                    error_dialog = QMessageBox.warning(self, "Error", "Cliente già presente", QMessageBox.Ok)
                 self.name_text.setText("Buisness_name")
                 self.investment_text.setText("Investment")
                 self.orders_text.setText("N_Orders")
-                # Operazione per aggiornare la tabella
-                self.model = TableModelImpiegato(self.data_impiegato)
-                self.table.setModel(self.model)
             except:
                 error_dialog = QMessageBox.warning(self, "Error", "Invalid insert", QMessageBox.Ok)
 
