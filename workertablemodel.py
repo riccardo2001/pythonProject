@@ -28,7 +28,7 @@ class TableModelBoss(QtCore.QAbstractTableModel):
         return False
 
     def flags(self, index):
-        return QtCore.Qt.ItemIsEditable | QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable
+        return QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable
 
     def rowCount(self, index):
         # The length of the outer list.
@@ -66,7 +66,7 @@ class TableModelOperator(QtCore.QAbstractTableModel):
         return False
 
     def flags(self, index):
-        return QtCore.Qt.ItemIsEditable | QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable
+        return QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable
 
     def rowCount(self, index):
         # The length of the outer list.
@@ -104,7 +104,7 @@ class TableModelImpiegato(QtCore.QAbstractTableModel):
         return False
 
     def flags(self, index):
-        return QtCore.Qt.ItemIsEditable | QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable
+        return QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable
 
     def rowCount(self, index):
         # The length of the outer list.

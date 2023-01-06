@@ -90,7 +90,7 @@ class SottoWindowBoss(QWidget):
         # Do la possibilità di regolare la dimensione delle colonne
         self.table.adjustSize()
 
-        # Do la possibilità di modifica delle colonne
+        # Aggiungo il trigger di quando la tabella viene toccata
         self.table.setEditTriggers(QtWidgets.QTableView.DoubleClicked | QtWidgets.QTableView.EditKeyPressed)
         self.table.setModel(self.model)
 
@@ -115,7 +115,7 @@ class SottoWindowBoss(QWidget):
         self.key_text = WorkerLine(self)
         button1 = BossBtn("Sort")
         button1.clicked.connect(self.ordina)
-
+        self.reverse = QCheckBox("REVERSE")
         # Find
         word_label = WorkerLabel("Search word: ")
         self.word_text = WorkerLine(self)
@@ -150,6 +150,7 @@ class SottoWindowBoss(QWidget):
         tab2.layout.addWidget(key_label, 0, 1)
         tab2.layout.addWidget(self.key_text, 0, 2)
         tab2.layout.addWidget(button1, 0, 3)
+        tab2.layout.addWidget(self.reverse, 0, 4)
         tab2.layout.addWidget(word_label, 1, 1)
         tab2.layout.addWidget(self.word_text, 1, 2)
         tab2.layout.addWidget(button2, 1, 3)
@@ -201,7 +202,7 @@ class SottoWindowBoss(QWidget):
         if self.key_text.text():
             try:
                 # Operazione per aggiornare la tabella
-                self.model = TableModelOperator(sorted(self.data_boss, key=lambda i: i[int(self.key_text.text())-1]))
+                self.model = TableModelOperator(sorted(self.data_boss, key=lambda i: i[int(self.key_text.text())-1],reverse=self.reverse.isChecked()))
                 self.key_text.setText("")
                 self.table.setModel(self.model)
                 self.savefun()
@@ -237,10 +238,10 @@ class SottoWindowBoss(QWidget):
             try:
 
                 # Operazione per aggiornare la tabella
-                self.data_boss.append([self.name.text(), self.age.text(), self.type.text(), self.salary.text()])
+                self.data_boss.append([self.name.text(), int(self.age.text()), self.type.text(), int(self.salary.text())])
                 self.model = TableModelOperator(self.data_boss)
                 self.table.setModel(self.model)
-                self.company.add_worker(self.emp_op_factory.create_worker(self.name.text(), self.age.text(), self.username.text(), self.password.text(), self.type.text(), self.salary.text()))
+                self.company.add_worker(self.emp_op_factory.create_worker(self.name.text(), int(self.age.text()), self.username.text(), self.password.text(), self.type.text(), int(self.salary.text())))
                 self.name.setText("Name")
                 self.age.setText("Age")
                 self.username.setText("Username")
@@ -262,7 +263,7 @@ class SottoWindowBoss(QWidget):
 
                 if out:
                     # Operazioni di aggiornamento e visualizzazione nuova tabella
-                    self.data_boss[out[0][0]][3] = self.salary_text.text()
+                    self.data_boss[out[0][0]][3] = int(self.salary_text.text())
                     self.model = TableModelOperator(self.data_boss)
                     self.table.setModel(self.model)
                     self.company.setworker_salary(self.salary_text.text(), self.namesal_text.text())
@@ -285,7 +286,7 @@ class SottoWindowBoss(QWidget):
         if self.delete_text.text():
             try:
                 out = [(ind, ind2) for ind, i in enumerate(self.data_boss)
-                       for ind2, y in enumerate(i) if self.delete_text.text() in str(y)]
+                       for ind2, y in enumerate(i) if self.delete_text.text() == str(y)]
 
                 if out:
                     # Operazioni di aggiornamento e visualizzazione nuova tabella
@@ -298,7 +299,7 @@ class SottoWindowBoss(QWidget):
                     self.serialize_obj()
                 else:
                     msg = QMessageBox()
-                    msg.setText("Elemento non trovato")
+                    msg.setText("Elemento non trovato(il nome utente cercato deve essere identico a quello in tabella)")
                     msg.exec_()
             except:
                 error_dialog = QMessageBox.warning(self, "Error", "Invalid insert", QMessageBox.Ok)
@@ -354,7 +355,7 @@ class WindowOperator(QWidget):
         # Do la possibilità di regolare la dimensione delle colonne
         self.table.adjustSize()
 
-        # Do la possibilità di modifica delle colonne
+        # Aggiungo il trigger di quando la tabella viene toccata
         self.table.setEditTriggers(QtWidgets.QTableView.DoubleClicked | QtWidgets.QTableView.EditKeyPressed)
         self.table.setModel(self.model)
 
@@ -380,6 +381,7 @@ class WindowOperator(QWidget):
         self.key_text = WorkerLine(self)
         button1 = WorkerBtn("Sort")
         button1.clicked.connect(self.ordina)
+        self.reverse = QCheckBox("REVERSE", self)
 
         # Find
         word_label = WorkerLabel("Search word: ")
@@ -412,6 +414,7 @@ class WindowOperator(QWidget):
         tab2.layout.addWidget(key_label, 0, 1)
         tab2.layout.addWidget(self.key_text, 0, 2)
         tab2.layout.addWidget(button1, 0, 3)
+        tab2.layout.addWidget(self.reverse, 0, 4)
         tab2.layout.addWidget(word_label, 1, 1)
         tab2.layout.addWidget(self.word_text, 1, 2)
         tab2.layout.addWidget(button2, 1, 3)
@@ -452,7 +455,7 @@ class WindowOperator(QWidget):
         if self.key_text.text():
             try:
                 # Operazione per aggiornare la tabella
-                self.model = TableModelOperator(sorted(self.data_operatore, key=lambda i: i[int(self.key_text.text())-1]))
+                self.model = TableModelOperator(sorted(self.data_operatore, key=lambda i: i[int(self.key_text.text())-1], reverse=self.reverse.isChecked()))
                 self.key_text.setText("")
                 self.table.setModel(self.model)
             except:
@@ -508,7 +511,7 @@ class WindowOperator(QWidget):
         if self.type_text.text() and self.color_text.text() and self.number_text.text():
             try:
                 if self.optionals_text.text():
-                    self.data_operatore.append([self.type_text.text(), self.color_text.text(), self.number_text.text(), self.optionals_text.text()])
+                    self.data_operatore.append([self.type_text.text(), self.color_text.text(), int(self.number_text.text()), self.optionals_text.text()])
                 else:
                     self.data_operatore.append([self.type_text.text(), self.color_text.text(), self.number_text.text(), " "])
                 self.type_text.setText("Type")
@@ -581,7 +584,7 @@ class WindowEmployee(QWidget):
         # Do la possibilità di regolare la dimensione delle colonne
         self.table.adjustSize()
 
-        # Do la possibilità di modifica delle colonne
+        # Aggiungo il trigger di quando la tabella viene toccata
         self.table.setEditTriggers(QtWidgets.QTableView.DoubleClicked | QtWidgets.QTableView.EditKeyPressed)
 
         # Inizializzo la visualizzazione tab
@@ -612,6 +615,7 @@ class WindowEmployee(QWidget):
         self.word_text = WorkerLine(self)
         button2 = WorkerBtn("Find")
         button2.clicked.connect(self.cerca)
+        self.reverse = QCheckBox("REVERSE", self)
 
         # Delete
         delete_label = WorkerLabel("Delete word: ")
@@ -637,6 +641,7 @@ class WindowEmployee(QWidget):
         tab2.layout.addWidget(key_label, 0, 1)
         tab2.layout.addWidget(self.key_text, 0, 2)
         tab2.layout.addWidget(button1, 0, 3)
+        tab2.layout.addWidget(self.reverse, 0, 4)
         tab2.layout.addWidget(word_label, 1, 1)
         tab2.layout.addWidget(self.word_text, 1, 2)
         tab2.layout.addWidget(button2, 1, 3)
@@ -674,13 +679,16 @@ class WindowEmployee(QWidget):
     def ordina(self):
         if self.key_text.text():
             try:
+                print(self.key_text.text())
+                print(self.data_impiegato[0])
+                print(self.data_impiegato[1])
+                print(self.data_impiegato[2])
                 # Operazione per aggiornare la tabella, uso lmbda evitando l'uso di item getter che mi aggiunge un nuovo modulo
-                self.model = TableModelImpiegato(sorted(self.data_impiegato, key=lambda i: i[int(self.key_text.text())-1]))
+                self.model = TableModelImpiegato(sorted(self.data_impiegato, key=lambda i: i[int(self.key_text.text())-1], reverse=self.reverse.isChecked()))
                 self.key_text.setText("")
                 self.table.setModel(self.model)
-            except:
-                error_dialog = QMessageBox.warning(self, "Error", "Invalid insert", QMessageBox.Ok)
-
+            except Exception as e:
+                print(e)
         else:
             error_dialog = QMessageBox.warning(self, "Error", "Invalid insert", QMessageBox.Ok)
 
@@ -710,7 +718,7 @@ class WindowEmployee(QWidget):
     def insert(self):
         if self.name_text.text() and self.investment_text.text() and self.orders_text.text():
             try:
-                self.data_impiegato.append([self.name_text.text(), self.investment_text.text(), self.orders_text.text()])
+                self.data_impiegato.append([self.name_text.text(), int(self.investment_text.text()), int(self.orders_text.text())])
                 self.name_text.setText("Buisness_name")
                 self.investment_text.setText("Investment")
                 self.orders_text.setText("N_Orders")
