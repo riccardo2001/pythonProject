@@ -1,1 +1,0 @@
-[["mike123", 35, "Operator", 1500], ["bob123", 35, "Operator", 1500], ["alice123", 28, "Operator", 1500], ["charlie123", 40, "Operator", 1500]]

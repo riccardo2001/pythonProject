@@ -51,25 +51,21 @@ class LoginWindow(QWidget):
         # Ottengo le credenziali
         username = self.username_edit.text()
         password = self.password_edit.text()
+
         # Verifico se le credenziali sono nella compagnia
         person = self.company.check_credentials(username, password)
+
         # Di seguito creo un visione diversa a seconda di chi si è loggato e chiudo la login window
         if person == "Boss":
-            with open('username.txt', 'w') as f:
-                f.write(username + '\n')
-            self.w = WindowBoss(self.company, self.emp_op_factory)
+            self.w = WindowBoss(self.company, self.emp_op_factory, self.username_edit.text())
             self.w.show()
             self.close()
         elif person == "Employee":
-            with open('username.txt', 'w') as f:
-                f.write(username + '\n')
-            self.w = WindowEmployee()
+            self.w = WindowEmployee(self.username_edit.text())
             self.w.show()
             self.close()
         elif person == "Operator":
-            with open('username.txt', 'w') as f:
-                f.write(username + '\n')
-            self.w = WindowOperator()
+            self.w = WindowOperator(self.username_edit.text())
             self.w.show()
             self.close()
         else:

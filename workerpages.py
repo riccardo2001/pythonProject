@@ -10,14 +10,19 @@ import os
 import pickle
 
 class WindowBoss(QWidget):
-    def __init__(self, company, emp_op_factory):
+    def __init__(self, company, emp_op_factory, username):
         super().__init__()
+
+        # Setto varibili
         self.company = company
         self.emp_op_factory = emp_op_factory
+        self.username = username
+
+        # Setto finestra
         self.setWindowTitle("Loggato come Boss")
         layout = QGridLayout()
-        # Inizializzazione della nested list per la tabella
 
+        # Setto i bottoni
         boss = BossSpecBtn("Boss View")
         boss.clicked.connect(self.viewBoss)
         employee = BossSpecBtn("Employee View")
@@ -27,12 +32,13 @@ class WindowBoss(QWidget):
         boss_label = BossLabel("Welcome Boss!")
         boss_label.setAlignment(Qt.Qt.AlignCenter)
 
-        #setto lo sfondo
+        # Setto i widget
         self.setLayout(layout)
         layout.addWidget(boss_label)
         layout.addWidget(boss)
         layout.addWidget(employee)
         layout.addWidget(operator)
+
         #Setto schermo intero
         self.setStyleSheet("background-image: url(img.png);")
         self.showMaximized()
@@ -43,20 +49,24 @@ class WindowBoss(QWidget):
         self.w.show()
 
     def viewEmployee(self):
-        self.w = WindowEmployee()
+        self.w = WindowEmployee(self.username)
         self.w.show()
 
     def viewOperator(self):
-        self.w = WindowOperator()
+        self.w = WindowOperator(self.username)
         self.w.show()
 
 
 class SottoWindowBoss(QWidget):
     def __init__(self, company, emp_op_factory):
         super().__init__()
+
+        # Setto variabili
         self.company = company
         self.emp_op_factory = emp_op_factory
         self.setWindowTitle("Loggato come Boss")
+
+        # Se c'è data la carico senno me la ricalcolo da company che viene passato come parametro
         if os.path.exists('data_boss.txt'):
             # Open file for reading
             with open('data_boss.txt', 'r') as f:
@@ -64,22 +74,27 @@ class SottoWindowBoss(QWidget):
                 self.data_boss = json.loads(f.read())
         else:
             self.data_boss = [[worker.username, worker.age, worker.get_type(), worker.salary] for worker in self.company.get_workers()]
+
         # Creazione tabella
         self.table = QtWidgets.QTableView()
+
         # Aggiusto l'ultima colonna senno devo allargarla tutte le volte
         self.table.resizeColumnToContents(0)
         self.table.resizeColumnToContents(1)
         self.table.resizeColumnToContents(2)
         self.table.resizeColumnToContents(3)
+
         # Setup table
         self.model = TableModelBoss(self.data_boss)
+
         # Do la possibilità di regolare la dimensione delle colonne
         self.table.adjustSize()
+
         # Do la possibilità di modifica delle colonne
         self.table.setEditTriggers(QtWidgets.QTableView.DoubleClicked | QtWidgets.QTableView.EditKeyPressed)
         self.table.setModel(self.model)
 
-        # Inizializzo la visualizzazione tab
+        # Inizializzo i tab
         tabs = QTabWidget()
         tab1 = QWidget()
         tab2 = QWidget()
@@ -88,35 +103,38 @@ class SottoWindowBoss(QWidget):
         tabs.addTab(tab1, "Dipendenti")
         tabs.addTab(tab2, "Operazioni")
 
-        # Creao il primo tab
+        # Creao tab1-2 e aggiungo table
         tab1.layout = QVBoxLayout()
         tab1.layout.addWidget(self.table)
         tab1.setLayout(tab1.layout)
         user_label = BossLabel("Welcome Boss")
-
-        # Creo il secondo tab
         tab2.layout = QGridLayout()
+
         # Sort
         key_label = WorkerLabel("Sorted by Col: ")
         self.key_text = WorkerLine(self)
         button1 = BossBtn("Sort")
         button1.clicked.connect(self.ordina)
+
         # Find
         word_label = WorkerLabel("Search word: ")
         self.word_text = WorkerLine(self)
         button2 = BossBtn("Find")
         button2.clicked.connect(self.cerca)
+
         # Delete
         delete_label = WorkerLabel("Worker name: ")
         self.delete_text = WorkerLine(self)
         button3 = BossBtn("Fire")
         button3.clicked.connect(self.fire)
+
         # Cambia paga
         salary_label = WorkerLabel("New Salary: ")
         self.namesal_text = WorkerLine("Username")
         self.salary_text = WorkerLine("Salary")
         button4 = BossBtn("Done")
         button4.clicked.connect(self.salary)
+
         # Aggiungi dipendente
         type_label = WorkerLabel("Insert values: ")
         self.name = WorkerLine("Name")
@@ -128,6 +146,7 @@ class SottoWindowBoss(QWidget):
         button5 = BossBtn("Insert")
         button5.clicked.connect(self.insert)
 
+        # Aggiungo i componenti a tab2
         tab2.layout.addWidget(key_label, 0, 1)
         tab2.layout.addWidget(self.key_text, 0, 2)
         tab2.layout.addWidget(button1, 0, 3)
@@ -151,14 +170,13 @@ class SottoWindowBoss(QWidget):
         tab2.layout.addWidget(button4, 4, 4)
         tab2.setLayout(tab2.layout)
 
-
         # Logout
         logout = BossBtn("Logout")
         logout.clicked.connect(self.close)
+
         # Save
         save = BossBtn("Save")
         save.clicked.connect(self.savefun)
-
 
         # Imposto il layout per la finestra principale e gli aggiungo i widget
         layout = QGridLayout()
@@ -169,6 +187,7 @@ class SottoWindowBoss(QWidget):
         self.setStyleSheet("background-color: silver; background-repeat: no-repeat; background-position: center")
         self.setLayout(layout)
 
+    # Funzione per il salvataggio di data_boss
     def savefun(self):
         try:
             # Open file for writing
@@ -185,6 +204,7 @@ class SottoWindowBoss(QWidget):
                 self.model = TableModelOperator(sorted(self.data_boss, key=lambda i: i[int(self.key_text.text())-1]))
                 self.key_text.setText("")
                 self.table.setModel(self.model)
+                self.savefun()
             except:
                 error_dialog = QMessageBox.warning(self, "Error", "Invalid insert", QMessageBox.Ok)
         else:
@@ -195,6 +215,7 @@ class SottoWindowBoss(QWidget):
             try:
                 out = [(ind, ind2) for ind, i in enumerate(self.data_boss)
                        for ind2, y in enumerate(i) if self.word_text.text() in str(y)]
+
                 # Aggiungo 1 agli indici per renderlo leggibile in tabella
                 out = [(x + 1, y + 1) for x, y in out]
                 self.word_text.setText("")
@@ -214,8 +235,9 @@ class SottoWindowBoss(QWidget):
     def insert(self):
         if self.name.text() and self.age.text() and self.username.text() and self.password.text() and (self.type.text() == "Operator" or self.type.text() == "Employee") and self.salary.text():
             try:
-                self.data_boss.append([self.name.text(), self.age.text(), self.type.text(), self.salary.text()])
+
                 # Operazione per aggiornare la tabella
+                self.data_boss.append([self.name.text(), self.age.text(), self.type.text(), self.salary.text()])
                 self.model = TableModelOperator(self.data_boss)
                 self.table.setModel(self.model)
                 self.company.add_worker(self.emp_op_factory.create_worker(self.name.text(), self.age.text(), self.username.text(), self.password.text(), self.type.text(), self.salary.text()))
@@ -226,6 +248,7 @@ class SottoWindowBoss(QWidget):
                 self.type.setText("Type")
                 self.salary.setText("Salary")
                 self.serialize_obj()
+                self.savefun()
             except:
                 error_dialog = QMessageBox.warning(self, "Error", "Invalid insert", QMessageBox.Ok)
         else:
@@ -238,6 +261,7 @@ class SottoWindowBoss(QWidget):
                        for ind2, y in enumerate(i) if self.namesal_text.text() in str(y)]
 
                 if out:
+                    # Operazioni di aggiornamento e visualizzazione nuova tabella
                     self.data_boss[out[0][0]][3] = self.salary_text.text()
                     self.model = TableModelOperator(self.data_boss)
                     self.table.setModel(self.model)
@@ -245,6 +269,7 @@ class SottoWindowBoss(QWidget):
                     self.namesal_text.setText("Username")
                     self.salary_text.setText("Salary")
                     self.serialize_obj()
+                    self.savefun()
                 else:
                     msg = QMessageBox()
                     msg.setText("Elemento non trovato")
@@ -263,6 +288,7 @@ class SottoWindowBoss(QWidget):
                        for ind2, y in enumerate(i) if self.delete_text.text() in str(y)]
 
                 if out:
+                    # Operazioni di aggiornamento e visualizzazione nuova tabella
                     del(self.data_boss[out[0][0]])
                     self.model = TableModelOperator(self.data_boss)
                     self.table.setModel(self.model)
@@ -280,21 +306,25 @@ class SottoWindowBoss(QWidget):
         else:
             error_dialog = QMessageBox.warning(self, "Error", "Invalid insert", QMessageBox.Ok)
 
+    # Questa funzione serve per salvare l'oggetto company
     def serialize_obj(self):
-        # apriamo un file in modalità scrittura binaria
-        with open("company.pickle", "wb") as f:
-            # serializziamo l'oggetto e lo scriviamo sul file
-            pickle.dump(self.company, f)
+        try:
+            # apriamo un file in modalità scrittura binaria
+            with open("company.pickle", "wb") as f:
+                # serializziamo l'oggetto e lo scriviamo sul file
+                pickle.dump(self.company, f)
+        except:
+            error_dialog = QMessageBox.warning(self, "Error", "Invalid insert", QMessageBox.Ok)
 
 
 class WindowOperator(QWidget):
-    def __init__(self):
+    def __init__(self, nome_utente):
         super().__init__()
         self.data_operatore = []
-        with open('username.txt', 'r') as f:
-            username = f.read()
+        username = nome_utente
+
+        # Se c'è già la lista data_operatore la carico senno me la creao
         if os.path.exists('data_operatore.txt'):
-            # Open file for reading
             with open('data_operatore.txt', 'r') as f:
                 # Read JSON string from file and parse it
                 self.data_operatore = json.loads(f.read())
@@ -308,19 +338,26 @@ class WindowOperator(QWidget):
                   Car("Hatchback", "green", 3, ["sport suspension", "rearview camera"]),
                   Car("Coupe", "black", 4, ["turbocharged engine", "sport wheels"])]])
 
+        # Do il benvenuto
         user_label = WorkerLabel("Welcome " + username)
         self.setWindowTitle("Loggato come Operatore")
+
         # Creazione tabella
         self.table = QtWidgets.QTableView()
+
         # Setup table
         self.model = TableModelOperator(self.data_operatore)
+
         # Aggiusto l'ultima colonna senno devo allargarla tutte le volte
         self.table.resizeColumnToContents(3)
+
         # Do la possibilità di regolare la dimensione delle colonne
         self.table.adjustSize()
+
         # Do la possibilità di modifica delle colonne
         self.table.setEditTriggers(QtWidgets.QTableView.DoubleClicked | QtWidgets.QTableView.EditKeyPressed)
         self.table.setModel(self.model)
+
         # Inizializzo la visualizzazione tab
         tabs = QTabWidget()
         tab1 = QWidget()
@@ -337,22 +374,26 @@ class WindowOperator(QWidget):
 
         # Creo il secondo tab
         tab2.layout = QGridLayout(self)
+
         # Sort
         key_label = WorkerLabel("Sorted by Col: ")
         self.key_text = WorkerLine(self)
         button1 = WorkerBtn("Sort")
         button1.clicked.connect(self.ordina)
+
         # Find
         word_label = WorkerLabel("Search word: ")
         self.word_text = WorkerLine(self)
         button2 = WorkerBtn("Find")
         button2.clicked.connect(self.cerca)
+
         # Delete
         delete_label = WorkerLabel("Delete word: ")
         self.delete_text = WorkerLine(self)
         button3 = WorkerBtn("Remove")
         button3.clicked.connect(self.elimina)
         self.box = QCheckBox("ALL LINE", self)
+
         # Insert
         type_label = WorkerLabel("Insert values: ")
         self.type_text = WorkerLine("Type")
@@ -361,10 +402,12 @@ class WindowOperator(QWidget):
         self.optionals_text = WorkerLine("Optionals")
         button4 = WorkerBtn("Insert")
         button4.clicked.connect(self.insert)
+
         # Sum ordini
         sum_label = WorkerLabel("Sum Orders: ")
         button5 = WorkerBtn("Done")
         button5.clicked.connect(self.sum_ordini)
+
         # Aggiungo al tab i widget regolandoli nel gridlayout
         tab2.layout.addWidget(key_label, 0, 1)
         tab2.layout.addWidget(self.key_text, 0, 2)
@@ -385,14 +428,18 @@ class WindowOperator(QWidget):
         tab2.layout.addWidget(sum_label, 4, 1)
         tab2.layout.addWidget(button5, 4, 3)
         tab2.setLayout(tab2.layout)
+
         # Setto lo sfondo
         self.setStyleSheet("background-color: powderblue; background-repeat: no-repeat; background-position: center")
+
         # Logout
         logout = WorkerBtn("Logout")
         logout.clicked.connect(self.close)
+
         # Save
         save = WorkerBtn("Save")
         save.clicked.connect(self.savefun)
+
         # Imposto il layout per la finestra principale e gli aggiungo i widget
         layout = QGridLayout(self)
         layout.addWidget(user_label, 0, 1)
@@ -418,8 +465,8 @@ class WindowOperator(QWidget):
             try:
                 out = [(ind, ind2) for ind, i in enumerate(self.data_operatore)
                        for ind2, y in enumerate(i) if self.word_text.text() in str(y)]
-                # Aggiungo 1 agli indici per renderlo leggibile in tabella
 
+                # Aggiungo 1 agli indici per renderlo leggibile in tabella
                 out = [(x + 1, y + 1) for x, y in out]
                 self.word_text.setText("")
                 if out:
@@ -468,6 +515,7 @@ class WindowOperator(QWidget):
                 self.color_text.setText("Color")
                 self.number_text.setText("Number")
                 self.optionals_text.setText("Optionals")
+
                 # Operazione per aggiornare la tabella
                 self.model = TableModelOperator(self.data_operatore)
                 self.table.setModel(self.model)
@@ -486,9 +534,10 @@ class WindowOperator(QWidget):
         except:
             error_dialog = QMessageBox.warning(self, "Error", "An error occured", QMessageBox.Ok)
 
+    # Funzione per il salvataggio di data_operatore
     def savefun(self):
         try:
-            # Open file for writing
+            # Apro il file
             with open('data_operatore.txt', 'w') as f:
                 # Convert list to JSON string and write to file
                 f.write(json.dumps(self.data_operatore))
@@ -497,12 +546,10 @@ class WindowOperator(QWidget):
 
 
 class WindowEmployee(QWidget):
-    def __init__(self):
+    def __init__(self, nome_user):
         super().__init__()
         self.data_impiegato = []
-        with open('username.txt', 'r') as f:
-            username = f.read()
-
+        username = nome_user
         if os.path.exists('data_impiegato.txt'):
             # Open file for reading
             with open('data_impiegato.txt', 'r') as f:
@@ -520,18 +567,23 @@ class WindowEmployee(QWidget):
 
         user_label = WorkerLabel("Welcome " + username)
         self.setWindowTitle("Loggato come Impiegato")
+
         # Creazione tabella
         self.table = QtWidgets.QTableView()
         # Setup table
         self.model = TableModelImpiegato(self.data_impiegato)
         self.table.setModel(self.model)
+
         # Aggiusto l'ultima colonna senno devo allargarla tutte le volte
         self.table.resizeColumnToContents(0)
         self.table.resizeColumnToContents(2)
+
         # Do la possibilità di regolare la dimensione delle colonne
         self.table.adjustSize()
+
         # Do la possibilità di modifica delle colonne
         self.table.setEditTriggers(QtWidgets.QTableView.DoubleClicked | QtWidgets.QTableView.EditKeyPressed)
+
         # Inizializzo la visualizzazione tab
         tabs = QTabWidget()
         tab1 = QWidget()
@@ -548,22 +600,26 @@ class WindowEmployee(QWidget):
 
         # Creo il secondo tab
         tab2.layout = QGridLayout(self)
+
         # Sort
         key_label = WorkerLabel("Sorted by Col: ")
         self.key_text = WorkerLine(self)
         button1 = WorkerBtn("Sort")
         button1.clicked.connect(self.ordina)
+
         # Find
         word_label = WorkerLabel("Search word: ")
         self.word_text = WorkerLine(self)
         button2 = WorkerBtn("Find")
         button2.clicked.connect(self.cerca)
+
         # Delete
         delete_label = WorkerLabel("Delete word: ")
         self.delete_text = WorkerLine(self)
         button3 = WorkerBtn("Remove")
         button3.clicked.connect(self.elimina)
         self.box = QCheckBox("ALL LINE", self)
+
         # Insert
         type_label = WorkerLabel("Insert values: ")
         self.name_text = WorkerLine("Buisness_name")
@@ -571,10 +627,12 @@ class WindowEmployee(QWidget):
         self.orders_text = WorkerLine("N_Orders")
         button4 = WorkerBtn("Insert")
         button4.clicked.connect(self.insert)
+
         # Somma soldi
         money_label = WorkerLabel("Income sum: ")
         money = WorkerBtn("Find")
         money.clicked.connect(self.income)
+
         # Aggiungo al tab i widget regolandoli nel gridlayout
         tab2.layout.addWidget(key_label, 0, 1)
         tab2.layout.addWidget(self.key_text, 0, 2)
@@ -594,14 +652,17 @@ class WindowEmployee(QWidget):
         tab2.layout.addWidget(money_label, 4, 1)
         tab2.layout.addWidget(money, 4, 3)
         tab2.setLayout(tab2.layout)
+
         # Setto lo sfondo
         self.setStyleSheet("background-color: blanchedalmond; background-repeat: no-repeat; background-position: center")
         # Logout
         logout = WorkerBtn("Logout")
         logout.clicked.connect(self.close)
+
         # Save
         save = WorkerBtn("Save")
         save.clicked.connect(self.savefun)
+
         # Imposto il layout per la finestra principale e gli aggiungo i widget
         layout = QGridLayout(self)
         layout.addWidget(user_label, 0, 1)
@@ -683,6 +744,7 @@ class WindowEmployee(QWidget):
         else:
             error_dialog = QMessageBox.warning(self, "Error", "Invalid insert", QMessageBox.Ok)
 
+    # Faccio la somma degli investimenti
     def income(self):
         try:
             msg = QMessageBox()
@@ -693,13 +755,12 @@ class WindowEmployee(QWidget):
         except:
             error_dialog = QMessageBox.warning(self, "Error", "An error occured", QMessageBox.Ok)
 
-
+    # Funzione per il salvataggio di data_impiegato
     def savefun(self):
         try:
-            # Open file for writing
+            # Apro il file
             with open('data_impiegato.txt', 'w') as f:
                 # Convert list to JSON string and write to file
                 f.write(json.dumps(self.data_impiegato))
         except:
             error_dialog = QMessageBox.warning(self, "Error", "Invalid save", QMessageBox.Ok)
-
