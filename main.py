@@ -1,14 +1,14 @@
 import sys
 from PyQt5.QtWidgets import QApplication
 from compagnie import Company
-from people import Emp_OP_Factory, BossFactory
+from people import WorkerFactory, BossFactory
 from loginpage import LoginWindow
 import pickle
 import os
 
 if __name__ == "__main__":
     # Creo le due factory
-    employee_factory = Emp_OP_Factory()
+    employee_factory = WorkerFactory()
     boss_factory = BossFactory()
 
     # Creo la compagnia

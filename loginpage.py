@@ -17,10 +17,10 @@ def measure_time(func):
 
 # Pagina di login
 class LoginWindow(QWidget):
-    def __init__(self, company, emp_op_factory):
+    def __init__(self, company, worker_factory):
         super().__init__()
         self.company = company
-        self.emp_op_factory = emp_op_factory
+        self.worker_factory = worker_factory
         layout = QGridLayout(self)
         # Create the username label and line edit
         username_label = LoginLabel("Username: ")
@@ -57,7 +57,7 @@ class LoginWindow(QWidget):
 
         # Di seguito creo un visione diversa a seconda di chi si è loggato e chiudo la login window
         if person == "Boss":
-            self.w = WindowBoss(self.company, self.emp_op_factory, self.username_edit.text())
+            self.w = WindowBoss(self.company, self.worker_factory, self.username_edit.text())
             self.w.show()
             self.close()
         elif person == "Employee":

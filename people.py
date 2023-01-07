@@ -15,7 +15,7 @@ def measure_time(func):
 # Uso la metaclasse perchè in python tutte le classi sono create da metaclassi ma quella di default è type,
 # a me serve una metaclasse che indichi il fatto che la mia classe sarà astratta che non può essere istanziata
 # Inoltre in questo file utilizzo il desing pattern abstract factory
-class WorkerFactory(metaclass=abc.ABCMeta):
+class PeopleFactory(metaclass=abc.ABCMeta):
     """Factory astratta per la creazione di oggetti worker"""
 
     @abc.abstractmethod
@@ -24,7 +24,7 @@ class WorkerFactory(metaclass=abc.ABCMeta):
         pass
 
 
-class Emp_OP_Factory(WorkerFactory):
+class WorkerFactory(PeopleFactory):
     """Concreta creazione della factory worker"""
     @measure_time
     def create_worker(self, name, age, username, password, type, salary):
@@ -36,14 +36,14 @@ class Emp_OP_Factory(WorkerFactory):
             raise ValueError("Invalid employee type")
 
 
-class BossFactory(WorkerFactory):
+class BossFactory(PeopleFactory):
     """Concreta creazione della factory boss"""
     @measure_time
     def create_worker(self, name, age, username, password, type, salary):
         return Boss(name, age, username, password, salary)
 
 
-class Worker(metaclass=abc.ABCMeta):
+class People(metaclass=abc.ABCMeta):
     """Classe astratta degli oggetti worker"""
 
     def __init__(self, name, age, username, password, salary):
@@ -61,7 +61,7 @@ class Worker(metaclass=abc.ABCMeta):
         self.salary = salary
 
 
-class Employee(Worker):
+class Employee(People):
     """Classe concreta degli oggetti employee"""
 
     def __init__(self, name, age, username, password, salary):
@@ -71,7 +71,7 @@ class Employee(Worker):
         return "Employee"
 
 
-class Operator(Worker):
+class Operator(People):
     """Classe concreta degli oggetti operator"""
 
     def __init__(self, name, age, username, password, salary):
@@ -81,7 +81,7 @@ class Operator(Worker):
         return "Operator"
 
 
-class Boss(Worker):
+class Boss(People):
     """Classe concreta degli oggetti boss"""
 
     def __init__(self, name, age, username, password, salary):

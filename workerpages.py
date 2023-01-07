@@ -10,12 +10,12 @@ import os
 import pickle
 
 class WindowBoss(QWidget):
-    def __init__(self, company, emp_op_factory, username):
+    def __init__(self, company, worker_factory, username):
         super().__init__()
 
         # Setto varibili
         self.company = company
-        self.emp_op_factory = emp_op_factory
+        self.worker_factory = worker_factory
         self.username = username
 
         # Setto finestra
@@ -45,7 +45,7 @@ class WindowBoss(QWidget):
 
 
     def viewBoss(self):
-        self.w = SottoWindowBoss(self.company, self.emp_op_factory)
+        self.w = SottoWindowBoss(self.company, self.worker_factory)
         self.w.show()
 
     def viewEmployee(self):
@@ -58,12 +58,12 @@ class WindowBoss(QWidget):
 
 
 class SottoWindowBoss(QWidget):
-    def __init__(self, company, emp_op_factory):
+    def __init__(self, company, worker_factory):
         super().__init__()
 
         # Setto variabili
         self.company = company
-        self.emp_op_factory = emp_op_factory
+        self.worker_factory = worker_factory
         self.setWindowTitle("Loggato come Boss")
 
         # Se c'è data la carico senno me la ricalcolo da company che viene passato come parametro
@@ -243,7 +243,7 @@ class SottoWindowBoss(QWidget):
                     self.data_boss.append([self.name.text(), int(self.age.text()), self.type.text(), int(self.salary.text())])
                     self.model = TableModelBoss(self.data_boss)
                     self.table.setModel(self.model)
-                    self.company.add_worker(self.emp_op_factory.create_worker(self.name.text(), int(self.age.text()), self.username.text(), self.password.text(), self.type.text(), int(self.salary.text())))
+                    self.company.add_worker(self.worker_factory.create_worker(self.name.text(), int(self.age.text()), self.username.text(), self.password.text(), self.type.text(), int(self.salary.text())))
                     self.serialize_obj()
                     self.savefun()
                 else:
