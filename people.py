@@ -16,11 +16,11 @@ def measure_time(func):
 # a me serve una metaclasse che indichi il fatto che la mia classe sarà astratta che non può essere istanziata
 # Inoltre in questo file utilizzo il desing pattern abstract factory
 class PeopleFactory(metaclass=abc.ABCMeta):
-    """Factory astratta per la creazione di oggetti worker"""
+    """Factory astratta per la creazione di oggetti people"""
 
     @abc.abstractmethod
     def create_worker(self, name, age, username, password, type, salary):
-        """Creazione degli oggetti worker, definita astratta"""
+        """Creazione degli oggetti people, definita astratta"""
         pass
 
 
@@ -44,7 +44,7 @@ class BossFactory(PeopleFactory):
 
 
 class People(metaclass=abc.ABCMeta):
-    """Classe astratta degli oggetti worker"""
+    """Classe astratta degli oggetti people"""
 
     def __init__(self, name, age, username, password, salary):
         self.name = name
