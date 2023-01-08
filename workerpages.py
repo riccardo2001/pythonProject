@@ -112,19 +112,19 @@ class SottoWindowBoss(QWidget):
 
         # Sort
         key_label = WorkerLabel("Sorted by Col: ")
-        self.key_text = WorkerLine(self)
+        self.key_text = WorkerLine("")
         button1 = BossBtn("Sort")
         button1.clicked.connect(self.ordina)
         self.reverse = QCheckBox("REVERSE")
         # Find
         word_label = WorkerLabel("Search word: ")
-        self.word_text = WorkerLine(self)
+        self.word_text = WorkerLine("")
         button2 = BossBtn("Find")
         button2.clicked.connect(self.cerca)
 
         # Delete
         delete_label = WorkerLabel("Worker Username: ")
-        self.delete_text = WorkerLine(self)
+        self.delete_text = WorkerLine("")
         button3 = BossBtn("Fire")
         button3.clicked.connect(self.fire)
 
@@ -374,32 +374,32 @@ class WindowOperator(QWidget):
         tabs.addTab(tab2, "Operazioni")
 
         # Creao il primo tab
-        tab1.layout = QVBoxLayout(self)
+        tab1.layout = QVBoxLayout()
         tab1.layout.addWidget(self.table)
         tab1.setLayout(tab1.layout)
 
         # Creo il secondo tab
-        tab2.layout = QGridLayout(self)
+        tab2.layout = QGridLayout()
 
         # Sort
         key_label = WorkerLabel("Sorted by Col: ")
-        self.key_text = WorkerLine(self)
+        self.key_text = WorkerLine("")
         button1 = WorkerBtn("Sort")
         button1.clicked.connect(self.ordina)
-        self.reverse = QCheckBox("REVERSE", self)
+        self.reverse = QCheckBox("REVERSE")
 
         # Find
         word_label = WorkerLabel("Search word: ")
-        self.word_text = WorkerLine(self)
+        self.word_text = WorkerLine("")
         button2 = WorkerBtn("Find")
         button2.clicked.connect(self.cerca)
 
         # Delete
         delete_label = WorkerLabel("Delete word: ")
-        self.delete_text = WorkerLine(self)
+        self.delete_text = WorkerLine("")
         button3 = WorkerBtn("Remove")
         button3.clicked.connect(self.elimina)
-        self.box = QCheckBox("ALL LINE", self)
+        self.box = QCheckBox("ALL LINE")
 
         # Insert
         type_label = WorkerLabel("Insert values: ")
@@ -449,7 +449,7 @@ class WindowOperator(QWidget):
         save.clicked.connect(self.savefun)
 
         # Imposto il layout per la finestra principale e gli aggiungo i widget
-        layout = QGridLayout(self)
+        layout = QGridLayout()
         layout.addWidget(user_label, 0, 1)
         layout.addWidget(tabs, 1, 1, 1, 10)
         layout.addWidget(save, 0, 9)
@@ -609,32 +609,32 @@ class WindowEmployee(QWidget):
         tabs.addTab(tab2, "Operazioni")
 
         # Creao il primo tab
-        tab1.layout = QVBoxLayout(self)
+        tab1.layout = QVBoxLayout()
         tab1.layout.addWidget(self.table)
         tab1.setLayout(tab1.layout)
 
         # Creo il secondo tab
-        tab2.layout = QGridLayout(self)
+        tab2.layout = QGridLayout()
 
         # Sort
         key_label = WorkerLabel("Sorted by Col: ")
-        self.key_text = WorkerLine(self)
+        self.key_text = WorkerLine("")
         button1 = WorkerBtn("Sort")
         button1.clicked.connect(self.ordina)
 
         # Find
         word_label = WorkerLabel("Search word: ")
-        self.word_text = WorkerLine(self)
+        self.word_text = WorkerLine("")
         button2 = WorkerBtn("Find")
         button2.clicked.connect(self.cerca)
-        self.reverse = QCheckBox("REVERSE", self)
+        self.reverse = QCheckBox("REVERSE")
 
         # Delete
         delete_label = WorkerLabel("Delete word: ")
-        self.delete_text = WorkerLine(self)
+        self.delete_text = WorkerLine("")
         button3 = WorkerBtn("Remove")
         button3.clicked.connect(self.elimina)
-        self.box = QCheckBox("ALL LINE", self)
+        self.box = QCheckBox("ALL LINE")
 
         # Insert
         type_label = WorkerLabel("Insert values: ")
@@ -681,7 +681,7 @@ class WindowEmployee(QWidget):
         save.clicked.connect(self.savefun)
 
         # Imposto il layout per la finestra principale e gli aggiungo i widget
-        layout = QGridLayout(self)
+        layout = QGridLayout()
         layout.addWidget(user_label, 0, 1)
         layout.addWidget(tabs, 1, 1, 1, 10)
         layout.addWidget(save, 0, 9)

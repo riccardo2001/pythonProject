@@ -21,14 +21,14 @@ class LoginWindow(QWidget):
         super().__init__()
         self.company = company
         self.worker_factory = worker_factory
-        layout = QGridLayout(self)
+        layout = QGridLayout()
         # Create the username label and line edit
         username_label = LoginLabel("Username: ")
-        self.username_edit = LoginLine(self)
+        self.username_edit = LoginLine("")
 
         # Create the password label and line edit
         password_label = LoginLabel("Password: ")
-        self.password_edit = LoginLine(self)
+        self.password_edit = LoginLine("")
         self.password_edit.setEchoMode(QLineEdit.Password)
 
         # Create the login button
@@ -57,6 +57,7 @@ class LoginWindow(QWidget):
 
         # Di seguito creo un visione diversa a seconda di chi si è loggato e chiudo la login window
         if person == "Boss":
+            # Passo worker factory perchè ho bisogno di lui nella funzione insert
             self.w = WindowBoss(self.company, self.worker_factory, self.username_edit.text())
             self.w.show()
             self.close()
